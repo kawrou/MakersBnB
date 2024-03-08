@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Profile Page</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='/style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+        crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="{{ url_for('get_index') }}" style="color: #DDE6ED;">
+            <img src="/static/images/logo.jpeg" width="45" height="50" alt="logo-img">
+            MakersBnB
+        </a>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Hi, {{ user.user_name }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('get_index') }}">Main Page</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('logout') }}">Sign Out</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5"> <!--mt-5 doesn't have an linked class in style.css. Where is it from? -->
+        <a class="btn btn-primary" style="background-color: #27374D;" href="{{ url_for('create_space') }}">Create New Listing</a>
+    </div>
+
+    <div class="container mt-5"> <!--mt-5 doesn't have an linked class in style.css. Where is it from? -->
+        <h3 id="profile_listings_h3">My Listings</h3> <!-- Added an id for testing purposes-->
+        <div class="listings-profile-div">
+            <ul id="listed-spaces-list"> <!-- Added id for testing purposes-->
+                {% for space in spaces %}
+                <li>
+                    <article>
+                        <h5>
+                            {{ space.name }} <br> Address: {{ space.address }} <br>Price: {{ space.price }}£ <br>  {{ space.id }}<br>
+                        </h5>
+                            <a href="/space/{{ space.id }}">
+                                <img src="{{ url_for('static', filename=space.image_path) }}" alt="Space Image">   
+                            </a>
+                    </article>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="container mt-5"> <!--mt-5 doesn't have an linked class in style.css. Where is it from? -->
+        <h3 id="profile_bookings_h3">My Bookings</h3> <!-- Added an id for testing purposes-->
+        <div class="listings-profile-div">
+            <ul id="booked-spaces-list"> <!-- Added id for testing purposes-->
+                {% for booking in bookings %}
+                {% for listing in listing %}
+                {% if listing.id == booking.space_id %}        
+                <li>
+                    <article>
+                        <h5>
+                            <a href="/space/{{ booking.space_id }}" style="color:#27374D; text-decoration: none;">
+                                Booking Date: {{ booking.date_booked }} -  Space Name {{booking.space_name}} {{ booking.space_id }}  <img src="{{ url_for('static', filename=listing.image_path) }}" alt="Space Image">     
+                            </a>
+                        </h5>
+                    </article>
+                </li>
+                {% endif %}
+                {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <footer>©MakerBnB</footer>
+</body>
+</html>
